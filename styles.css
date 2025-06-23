@@ -490,40 +490,322 @@ input[type="file"] {
 
 /* Responsividade */
 @media (max-width: 768px) {
+    /* Overlay para mobile */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
+    
+    /* Sidebar mobile */
     .sidebar {
         position: fixed;
         top: 0;
         left: 0;
         height: 100vh;
+        width: 280px;
         transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        z-index: 1000;
     }
     
     .sidebar.open {
         transform: translateX(0);
     }
     
+    /* Toolbar mobile */
     .toolbar {
         flex-direction: column;
-        gap: 15px;
-        padding: 15px;
+        gap: 12px;
+        padding: 12px 15px;
+        min-height: auto;
+    }
+    
+    .toolbar-left {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .toolbar-left h1 {
+        font-size: 1.1rem;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     
     .toolbar-center {
         order: 2;
+        width: 100%;
+        justify-content: center;
     }
     
     .toolbar-right {
         order: 3;
         width: 100%;
         justify-content: center;
+        gap: 10px;
+    }
+    
+    /* Controles de zoom mobile */
+    .zoom-controls {
+        gap: 8px;
+    }
+    
+    .zoom-btn {
+        padding: 10px;
+        min-width: 40px;
+    }
+    
+    .zoom-level {
+        min-width: 45px;
+        font-size: 0.9rem;
+    }
+    
+    /* Botões de navegação mobile */
+    .nav-btn {
+        padding: 10px 15px;
+        min-width: 45px;
+    }
+    
+    .page-info {
+        min-width: 50px;
+        font-size: 0.9rem;
+    }
+    
+    /* Document viewer mobile */
+    .document-viewer {
+        margin-top: 0;
     }
     
     .welcome-content h2 {
         font-size: 1.5rem;
+        margin-bottom: 8px;
     }
     
     .welcome-content p {
         font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .upload-btn-large {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    /* Viewer container mobile */
+    .viewer-container {
+        padding: 10px;
+    }
+    
+    .viewer-wrapper {
+        padding: 10px;
+    }
+    
+    /* PDF pages mobile */
+    .pdf-page {
+        margin-bottom: 15px;
+    }
+    
+    .pdf-page canvas {
+        width: 100%;
+        height: auto;
+    }
+    
+    /* EPUB container mobile */
+    .epub-container {
+        padding: 20px;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
+    /* Document items mobile */
+    .document-item {
+        margin-bottom: 8px;
+    }
+    
+    .document-info {
+        padding: 12px;
+    }
+    
+    .document-info h4 {
+        font-size: 0.85rem;
+    }
+    
+    .document-info p {
+        font-size: 0.75rem;
+    }
+    
+    .remove-btn {
+        padding: 10px;
+    }
+    
+    /* File upload section mobile */
+    .file-upload-section {
+        padding: 15px;
+        gap: 8px;
+    }
+    
+    .upload-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+    
+    .clear-all-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    /* Document list mobile */
+    .document-list {
+        padding: 15px;
+    }
+    
+    .document-list h3 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    /* Empty state mobile */
+    .empty-state {
+        padding: 30px 15px;
+    }
+    
+    .empty-state i {
+        font-size: 2.5rem;
+    }
+    
+    .empty-state p {
+        font-size: 1rem;
+    }
+    
+    .empty-state small {
+        font-size: 0.85rem;
+    }
+    
+    /* Modal mobile */
+    .confirm-content {
+        margin: 20px;
+        padding: 1.5rem;
+        max-width: 90%;
+    }
+    
+    .confirm-header h3 {
+        font-size: 1.2rem;
+    }
+    
+    .confirm-body p {
+        font-size: 0.95rem;
+    }
+    
+    .confirm-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .btn-cancel,
+    .btn-remove,
+    .btn-clear {
+        width: 100%;
+        padding: 12px 20px;
+    }
+}
+
+/* Mobile muito pequeno */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+    }
+    
+    .toolbar-left h1 {
+        max-width: 150px;
+        font-size: 1rem;
+    }
+    
+    .welcome-content h2 {
+        font-size: 1.3rem;
+    }
+    
+    .welcome-content p {
+        font-size: 0.9rem;
+    }
+    
+    .upload-btn-large {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .zoom-controls {
+        gap: 5px;
+    }
+    
+    .zoom-btn {
+        padding: 8px;
+        min-width: 35px;
+    }
+    
+    .nav-btn {
+        padding: 8px 12px;
+        min-width: 40px;
+    }
+    
+    .page-info {
+        min-width: 45px;
+        font-size: 0.85rem;
+    }
+    
+    .document-info h4 {
+        font-size: 0.8rem;
+    }
+    
+    .document-info p {
+        font-size: 0.7rem;
+    }
+    
+    .epub-container {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Orientação landscape no mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+    .toolbar {
+        flex-direction: row;
+        gap: 15px;
+        padding: 10px 15px;
+    }
+    
+    .toolbar-left {
+        flex: 1;
+    }
+    
+    .toolbar-center {
+        order: 1;
+    }
+    
+    .toolbar-right {
+        order: 1;
+    }
+    
+    .welcome-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .welcome-content p {
+        font-size: 1.1rem;
     }
 }
 

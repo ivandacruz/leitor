@@ -17,6 +17,7 @@ class DocumentReader {
     initializeElements() {
         // Elementos da interface
         this.sidebar = document.getElementById('sidebar');
+        this.sidebarOverlay = document.getElementById('sidebarOverlay');
         this.menuBtn = document.getElementById('menuBtn');
         this.closeSidebar = document.getElementById('closeSidebar');
         this.fileInput = document.getElementById('fileInput');
@@ -42,7 +43,12 @@ class DocumentReader {
     bindEvents() {
         // Eventos da sidebar
         this.menuBtn.addEventListener('click', () => this.toggleSidebar());
-        this.closeSidebar.addEventListener('click', () => this.toggleSidebar());
+        this.closeSidebar.addEventListener('click', () => this.closeSidebarMenu());
+        
+        // Overlay para fechar sidebar no mobile
+        if (this.sidebarOverlay) {
+            this.sidebarOverlay.addEventListener('click', () => this.closeSidebarMenu());
+        }
         
         // Eventos de upload
         this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
@@ -67,10 +73,84 @@ class DocumentReader {
         
         // Eventos de redimensionamento
         window.addEventListener('resize', () => this.handleResize());
+        
+        // Touch events para mobile
+        this.addTouchEvents();
     }
 
     toggleSidebar() {
         this.sidebar.classList.toggle('open');
+        if (this.sidebarOverlay) {
+            this.sidebarOverlay.classList.toggle('active');
+        }
+        
+        // Prevenir scroll do body quando sidebar está aberta no mobile
+        if (window.innerWidth <= 768) {
+            document.body.style.overflow = this.sidebar.classList.contains('open') ? 'hidden' : '';
+        }
+    }
+
+    closeSidebarMenu() {
+        this.sidebar.classList.remove('open');
+        if (this.sidebarOverlay) {
+            this.sidebarOverlay.classList.remove('active');
+        }
+        document.body.style.overflow = '';
+    }
+
+    addTouchEvents() {
+        // Swipe para fechar sidebar no mobile
+        let startX = 0;
+        let startY = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            
+            // Swipe horizontal para direita (fechar sidebar)
+            if (Math.abs(diffX) > Math.abs(diffY) && diffX < -50 && this.sidebar.classList.contains('open')) {
+                this.closeSidebarMenu();
+            }
+            
+            // Swipe horizontal para esquerda (abrir sidebar)
+            if (Math.abs(diffX) > Math.abs(diffY) && diffX > 50 && !this.sidebar.classList.contains('open')) {
+                this.toggleSidebar();
+            }
+            
+            startX = 0;
+            startY = 0;
+        });
+        
+        // Double tap para zoom no mobile
+        let lastTap = 0;
+        this.viewerWrapper.addEventListener('touchend', (e) => {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            
+            if (tapLength < 500 && tapLength > 0) {
+                // Double tap detected
+                if (this.currentDocument && this.currentDocument.type === 'PDF') {
+                    if (this.zoomLevel < 2.0) {
+                        this.zoomLevel = 2.0;
+                    } else {
+                        this.zoomLevel = 1.0;
+                    }
+                    this.renderCurrentPage();
+                    this.updateControls();
+                }
+                e.preventDefault();
+            }
+            lastTap = currentTime;
+        });
     }
 
     async handleFileUpload(event) {
