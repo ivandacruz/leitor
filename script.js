@@ -22,6 +22,7 @@ class DocumentReader {
         this.fileInput = document.getElementById('fileInput');
         this.fileInputWelcome = document.getElementById('fileInputWelcome');
         this.documentList = document.getElementById('documents');
+        this.clearAllBtn = document.getElementById('clearAllBtn');
         this.welcomeScreen = document.getElementById('welcomeScreen');
         this.viewerContainer = document.getElementById('viewerContainer');
         this.viewerWrapper = document.getElementById('viewerWrapper');
@@ -46,6 +47,9 @@ class DocumentReader {
         // Eventos de upload
         this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
         this.fileInputWelcome.addEventListener('change', (e) => this.handleFileUpload(e));
+        
+        // Evento limpar todos
+        this.clearAllBtn.addEventListener('click', () => this.confirmClearAll());
         
         // Eventos de navegação
         this.prevPage.addEventListener('click', () => this.previousPage());
@@ -121,6 +125,24 @@ class DocumentReader {
     renderDocumentList() {
         this.documentList.innerHTML = '';
         
+        // Mostrar/ocultar botão "Limpar Todos"
+        if (this.documents.length > 0) {
+            this.clearAllBtn.style.display = 'flex';
+        } else {
+            this.clearAllBtn.style.display = 'none';
+        }
+        
+        if (this.documents.length === 0) {
+            this.documentList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-folder-open"></i>
+                    <p>Nenhum documento adicionado</p>
+                    <small>Arraste arquivos ou clique em "Adicionar Documento"</small>
+                </div>
+            `;
+            return;
+        }
+        
         this.documents.forEach(doc => {
             const docElement = document.createElement('div');
             docElement.className = 'document-item';
@@ -129,13 +151,109 @@ class DocumentReader {
             }
             
             docElement.innerHTML = `
-                <h4>${doc.name}</h4>
-                <p>${doc.type} • ${doc.size} • ${doc.addedAt}</p>
+                <div class="document-info">
+                    <h4>${doc.name}</h4>
+                    <p>${doc.type} • ${doc.size} • ${doc.addedAt}</p>
+                </div>
+                <div class="document-actions">
+                    <button class="remove-btn" title="Remover documento">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             `;
             
-            docElement.addEventListener('click', () => this.openDocument(doc));
+            // Evento para abrir documento
+            const documentInfo = docElement.querySelector('.document-info');
+            documentInfo.addEventListener('click', () => this.openDocument(doc));
+            
+            // Evento para remover documento
+            const removeBtn = docElement.querySelector('.remove-btn');
+            removeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evitar que o clique propague para o documento
+                this.confirmRemoveDocument(doc);
+            });
+            
             this.documentList.appendChild(docElement);
         });
+    }
+
+    confirmRemoveDocument(document) {
+        // Criar modal de confirmação
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.innerHTML = `
+            <div class="confirm-content">
+                <div class="confirm-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Remover Documento</h3>
+                </div>
+                <div class="confirm-body">
+                    <p>Tem certeza que deseja remover <strong>"${document.name}"</strong>?</p>
+                    <p class="confirm-warning">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="confirm-actions">
+                    <button class="btn-cancel">Cancelar</button>
+                    <button class="btn-remove">Remover</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Adicionar estilos para o modal
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        const content = modal.querySelector('.confirm-content');
+        content.style.cssText = `
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        `;
+        
+        // Eventos dos botões
+        const cancelBtn = modal.querySelector('.btn-cancel');
+        const removeBtn = modal.querySelector('.btn-remove');
+        
+        cancelBtn.addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        removeBtn.addEventListener('click', () => {
+            this.removeDocument(document.id);
+            modal.remove();
+        });
+        
+        // Fechar modal clicando fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+        
+        // Fechar com ESC
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEsc);
+            }
+        };
+        document.addEventListener('keydown', handleEsc);
     }
 
     async openDocument(document) {
@@ -404,6 +522,92 @@ class DocumentReader {
         
         this.renderDocumentList();
         this.saveDocumentsToStorage();
+    }
+
+    confirmClearAll() {
+        // Criar modal de confirmação
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        modal.innerHTML = `
+            <div class="confirm-content">
+                <div class="confirm-header">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Limpar Todos os Documentos</h3>
+                </div>
+                <div class="confirm-body">
+                    <p>Tem certeza que deseja limpar todos os documentos?</p>
+                    <p class="confirm-warning">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="confirm-actions">
+                    <button class="btn-cancel">Cancelar</button>
+                    <button class="btn-clear">Limpar</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Adicionar estilos para o modal
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s ease;
+        `;
+        
+        const content = modal.querySelector('.confirm-content');
+        content.style.cssText = `
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        `;
+        
+        // Eventos dos botões
+        const cancelBtn = modal.querySelector('.btn-cancel');
+        const clearBtn = modal.querySelector('.btn-clear');
+        
+        cancelBtn.addEventListener('click', () => {
+            modal.remove();
+        });
+        
+        clearBtn.addEventListener('click', () => {
+            this.documents = [];
+            this.currentDocument = null;
+            this.currentPage = 1;
+            this.zoomLevel = 1.0;
+            this.isFullscreen = false;
+            this.renderDocumentList();
+            this.saveDocumentsToStorage();
+            this.showWelcome();
+            modal.remove();
+        });
+        
+        // Fechar modal clicando fora
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+        
+        // Fechar com ESC
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') {
+                modal.remove();
+                document.removeEventListener('keydown', handleEsc);
+            }
+        };
+        document.addEventListener('keydown', handleEsc);
     }
 }
 

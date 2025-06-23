@@ -67,6 +67,9 @@ body {
 .file-upload-section {
     padding: 20px;
     border-bottom: 1px solid #34495e;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .upload-btn {
@@ -90,6 +93,30 @@ body {
     margin-right: 8px;
 }
 
+.clear-all-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e74c3c;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.clear-all-btn:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
+}
+
+.clear-all-btn i {
+    margin-right: 6px;
+}
+
 input[type="file"] {
     display: none;
 }
@@ -107,14 +134,42 @@ input[type="file"] {
     font-size: 1.1rem;
 }
 
+/* Estado vazio */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #bdc3c7;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+    color: #ecf0f1;
+}
+
+.empty-state small {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
 .document-item {
     background: #34495e;
     margin-bottom: 10px;
-    padding: 15px;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
     border-left: 4px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0;
+    overflow: hidden;
 }
 
 .document-item:hover {
@@ -126,15 +181,48 @@ input[type="file"] {
     background: #3d566e;
 }
 
-.document-item h4 {
+.document-info {
+    flex: 1;
+    padding: 15px;
+    cursor: pointer;
+}
+
+.document-info h4 {
     font-size: 0.9rem;
     margin-bottom: 5px;
     color: #ecf0f1;
 }
 
-.document-item p {
+.document-info p {
     font-size: 0.8rem;
     color: #bdc3c7;
+}
+
+.document-actions {
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #e74c3c;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.remove-btn:hover {
+    background: rgba(231, 76, 60, 0.2);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.remove-btn i {
+    font-size: 0.9rem;
 }
 
 /* Conteúdo principal */
@@ -459,4 +547,112 @@ input[type="file"] {
 
 .fullscreen .document-viewer {
     margin-top: 70px;
+}
+
+/* Modal de confirmação */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.confirm-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.confirm-header i {
+    font-size: 1.5rem;
+    color: #f39c12;
+}
+
+.confirm-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.confirm-body {
+    margin-bottom: 25px;
+}
+
+.confirm-body p {
+    margin-bottom: 10px;
+    color: #2c3e50;
+    line-height: 1.5;
+}
+
+.confirm-warning {
+    color: #e74c3c !important;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.confirm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-cancel {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background: #7f8c8d;
+}
+
+.btn-remove {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-remove:hover {
+    background: #c0392b;
+}
+
+.btn-clear {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.btn-clear:hover {
+    background: #c0392b;
 } 
