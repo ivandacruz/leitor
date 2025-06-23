@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de Integração - Leitor de Documentos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+        
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .feature {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .feature h3 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        .feature p {
+            margin: 0;
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+        
+        .demo-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .demo-btn {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        
+        .demo-btn:hover {
+            background: #2980b9;
+        }
+        
+        .code-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        .code-example pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Leitor de Documentos</h1>
+            <p>Uma solução completa para leitura de PDF, MOBI e EPUB</p>
+        </div>
+        
+        <div class="content">
+            <div class="features">
+                <div class="feature">
+                    <h3>🎯 Fácil de usar</h3>
+                    <p>Interface intuitiva que permite carregar e visualizar documentos com apenas alguns cliques.</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>📱 Responsivo</h3>
+                    <p>Funciona perfeitamente em desktop, tablet e dispositivos móveis com design adaptativo.</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>⚡ Performance</h3>
+                    <p>Carregamento rápido e navegação suave, mesmo com documentos grandes.</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>🔧 Personalizável</h3>
+                    <p>Código limpo e bem estruturado que permite fácil personalização e extensão.</p>
+                </div>
+            </div>
+            
+            <div class="demo-section">
+                <h2>Experimente o Leitor</h2>
+                <p>Clique no botão abaixo para abrir o leitor de documentos em uma nova aba:</p>
+                <a href="index.html" target="_blank" class="demo-btn">
+                    🚀 Abrir Leitor de Documentos
+                </a>
+            </div>
+            
+            <h2>Como integrar em seu projeto</h2>
+            <p>Para integrar o leitor em seu projeto, basta incluir os arquivos necessários:</p>
+            
+            <div class="code-example">
+                <pre><code>&lt;!-- HTML --&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Meu Projeto&lt;/title&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Conteúdo do leitor --&gt;
+    &lt;div class="app-container"&gt;
+        &lt;!-- Sidebar e conteúdo principal --&gt;
+    &lt;/div&gt;
+    
+    &lt;!-- Scripts necessários --&gt;
+    &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"&gt;&lt;/script&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+            
+            <h2>Funcionalidades principais</h2>
+            <ul>
+                <li><strong>Upload de arquivos:</strong> Suporte para PDF, MOBI e EPUB</li>
+                <li><strong>Navegação:</strong> Controles para navegar entre páginas</li>
+                <li><strong>Zoom:</strong> Ampliar e reduzir o conteúdo</li>
+                <li><strong>Fullscreen:</strong> Modo de visualização em tela cheia</li>
+                <li><strong>Atalhos de teclado:</strong> Navegação rápida</li>
+                <li><strong>Drag and drop:</strong> Arraste arquivos diretamente</li>
+                <li><strong>Persistência:</strong> Lista de documentos salva localmente</li>
+            </ul>
+            
+            <h2>Formatos suportados</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>📄 PDF</h3>
+                    <p>Suporte completo com renderização nativa usando PDF.js</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>📖 EPUB</h3>
+                    <p>Detecção básica do formato (requer biblioteca adicional para renderização completa)</p>
+                </div>
+                
+                <div class="feature">
+                    <h3>📱 MOBI</h3>
+                    <p>Detecção do formato (requer biblioteca específica para renderização)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 Leitor de Documentos. Desenvolvido com ❤️ para facilitar a leitura digital.</p>
+        </div>
+    </div>
+</body>
+</html> 

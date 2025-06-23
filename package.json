@@ -1,0 +1,37 @@
+{
+  "name": "leitor-documentos",
+  "version": "1.0.0",
+  "description": "Um leitor de documentos moderno que suporta PDF, MOBI e EPUB",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx live-server --port=3000 --open=/",
+    "build": "echo 'Projeto não requer build - arquivos estáticos'",
+    "test": "echo 'Testes não implementados ainda'"
+  },
+  "keywords": [
+    "pdf",
+    "epub",
+    "mobi",
+    "reader",
+    "document",
+    "viewer",
+    "javascript",
+    "html",
+    "css"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1",
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/leitor-documentos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/leitor-documentos/issues"
+  },
+  "homepage": "https://github.com/seu-usuario/leitor-documentos#readme"
+} 
