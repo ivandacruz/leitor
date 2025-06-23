@@ -1,13 +1,15 @@
 {
   "name": "leitor-documentos",
   "version": "1.0.0",
-  "description": "Um leitor de documentos moderno que suporta PDF, MOBI e EPUB",
+  "description": "Um leitor de documentos moderno e intuitivo que suporta PDF, MOBI e EPUB com interface responsiva",
   "main": "index.html",
   "scripts": {
     "start": "npx serve . -p 3000",
     "dev": "npx live-server --port=3000 --open=/",
     "build": "echo 'Projeto não requer build - arquivos estáticos'",
-    "test": "echo 'Testes não implementados ainda'"
+    "test": "echo 'Testes não implementados ainda'",
+    "lint": "echo 'Linting não configurado ainda'",
+    "format": "echo 'Formatação não configurada ainda'"
   },
   "keywords": [
     "pdf",
@@ -18,20 +20,48 @@
     "viewer",
     "javascript",
     "html",
-    "css"
+    "css",
+    "web-app",
+    "responsive",
+    "modern",
+    "ui",
+    "ux"
   ],
-  "author": "Seu Nome",
+  "author": {
+    "name": "Ivan da Cruz",
+    "email": "ivan@example.com",
+    "url": "https://github.com/ivandacruz"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ivandacruz/leitor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ivandacruz/leitor/issues"
+  },
+  "homepage": "https://github.com/ivandacruz/leitor#readme",
   "devDependencies": {
     "serve": "^14.2.1",
     "live-server": "^1.2.2"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/seu-usuario/leitor-documentos.git"
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   },
-  "bugs": {
-    "url": "https://github.com/seu-usuario/leitor-documentos/issues"
-  },
-  "homepage": "https://github.com/seu-usuario/leitor-documentos#readme"
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "files": [
+    "index.html",
+    "styles.css",
+    "script.js",
+    "landing.html",
+    "landing-styles.css",
+    "landing-script.js",
+    "README.md",
+    "LICENSE"
+  ]
 } 
