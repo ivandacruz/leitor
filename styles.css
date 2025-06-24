@@ -67,6 +67,13 @@ body {
     justify-content: center;
     min-width: 36px;
     min-height: 36px;
+    position: relative;
+    z-index: 10;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
 }
 
 .close-sidebar:hover {
@@ -76,6 +83,16 @@ body {
 
 .close-sidebar:active {
     transform: scale(0.95);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.close-sidebar:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+}
+
+.close-sidebar i {
+    pointer-events: none;
 }
 
 /* Seção de upload */

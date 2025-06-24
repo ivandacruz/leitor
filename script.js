@@ -40,12 +40,40 @@ class DocumentReader {
         this.zoomIn = document.getElementById('zoomIn');
         this.zoomLevel = document.getElementById('zoomLevel');
         this.fullscreenBtn = document.getElementById('fullscreenBtn');
+        
+        // Debug: verificar se o botão de fechar foi encontrado
+        console.log('closeSidebar element:', this.closeSidebar);
     }
 
     bindEvents() {
         // Eventos da sidebar
         this.menuBtn.addEventListener('click', () => this.toggleSidebar());
-        this.closeSidebar.addEventListener('click', () => this.closeSidebarMenu());
+        
+        // Verificar se o botão de fechar existe antes de adicionar o evento
+        if (this.closeSidebar) {
+            console.log('Adding click event to closeSidebar');
+            this.closeSidebar.addEventListener('click', (e) => {
+                console.log('closeSidebar clicked');
+                e.preventDefault();
+                e.stopPropagation();
+                this.closeSidebarMenu();
+            });
+            
+            // Adicionar múltiplos tipos de eventos para garantir compatibilidade
+            this.closeSidebar.addEventListener('touchstart', (e) => {
+                console.log('closeSidebar touchstart');
+                e.preventDefault();
+                this.closeSidebarMenu();
+            });
+            
+            this.closeSidebar.addEventListener('mousedown', (e) => {
+                console.log('closeSidebar mousedown');
+                e.preventDefault();
+                this.closeSidebarMenu();
+            });
+        } else {
+            console.error('closeSidebar element not found!');
+        }
         
         // Overlay para fechar sidebar no mobile
         if (this.sidebarOverlay) {
@@ -93,11 +121,21 @@ class DocumentReader {
     }
 
     closeSidebarMenu() {
+        console.log('closeSidebarMenu called');
+        console.log('Sidebar before close:', this.sidebar.classList.contains('open'));
+        
         this.sidebar.classList.remove('open');
+        
         if (this.sidebarOverlay) {
             this.sidebarOverlay.classList.remove('active');
         }
+        
         document.body.style.overflow = '';
+        
+        console.log('Sidebar after close:', this.sidebar.classList.contains('open'));
+        
+        // Forçar reflow para garantir que a animação seja aplicada
+        this.sidebar.offsetHeight;
     }
 
     addTouchEvents() {
