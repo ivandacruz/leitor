@@ -272,14 +272,19 @@ input[type="file"] {
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
-    opacity: 0.7;
+    opacity: 0.8;
     position: relative;
     z-index: 10;
-    min-width: 32px;
-    min-height: 32px;
+    min-width: 36px;
+    min-height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
 }
 
 .remove-btn:hover {
@@ -290,10 +295,16 @@ input[type="file"] {
 
 .remove-btn:active {
     transform: scale(0.95);
+    background: rgba(231, 76, 60, 0.3);
+}
+
+.remove-btn:focus {
+    outline: 2px solid rgba(231, 76, 60, 0.5);
+    outline-offset: 2px;
 }
 
 .remove-btn i {
-    font-size: 0.9rem;
+    font-size: 1rem;
     pointer-events: none;
 }
 

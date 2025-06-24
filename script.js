@@ -308,7 +308,7 @@ class DocumentReader {
                     <p>${doc.type} • ${doc.size} • ${doc.addedAt}</p>
                 </div>
                 <div class="document-actions">
-                    <button class="remove-btn" title="Remover documento" type="button">
+                    <button class="remove-btn" title="Remover documento" type="button" onclick="if(window.documentReader) { console.log('Remove button clicked via onclick for:', '${doc.name}'); window.documentReader.confirmRemoveDocument(${JSON.stringify(doc).replace(/"/g, '&quot;')}); } else { console.log('DocumentReader not available'); }">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -328,6 +328,9 @@ class DocumentReader {
                 e.preventDefault();
                 e.stopPropagation();
                 console.log('Tentando remover documento:', doc.name);
+                console.log('Event type:', e.type);
+                console.log('Target:', e.target);
+                console.log('Current target:', e.currentTarget);
                 this.confirmRemoveDocument(doc);
             };
             
@@ -335,6 +338,9 @@ class DocumentReader {
             removeBtn.addEventListener('click', handleRemove);
             removeBtn.addEventListener('touchstart', handleRemove);
             removeBtn.addEventListener('mousedown', handleRemove);
+            
+            // Debug: verificar se o botão foi encontrado
+            console.log('Remove button for', doc.name, ':', removeBtn);
             
             this.documentList.appendChild(docElement);
         });
