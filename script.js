@@ -6,14 +6,26 @@ class DocumentReader {
         this.documents = [];
         this.currentDocument = null;
         this.currentPage = 1;
+        this.totalPages = 0;
         this.zoomLevel = 1.0;
         this.isFullscreen = false;
         this.escHandler = null;
         
+        // Inicializar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        
         this.initializeElements();
         this.bindEvents();
         this.loadStoredDocuments();
-        this.adjustSidebarForScreenSize(); // Ajustar sidebar inicialmente
+        this.adjustSidebarForScreenSize();
+        
+        console.log('DocumentReader initialized');
+        console.log('All elements:', {
+            sidebar: this.sidebar,
+            closeSidebar: this.closeSidebar,
+            menuBtn: this.menuBtn,
+            sidebarOverlay: this.sidebarOverlay
+        });
     }
 
     initializeElements() {
@@ -52,27 +64,37 @@ class DocumentReader {
         // Verificar se o botão de fechar existe antes de adicionar o evento
         if (this.closeSidebar) {
             console.log('Adding click event to closeSidebar');
-            this.closeSidebar.addEventListener('click', (e) => {
-                console.log('closeSidebar clicked');
-                e.preventDefault();
-                e.stopPropagation();
-                this.closeSidebarMenu();
-            });
             
-            // Adicionar múltiplos tipos de eventos para garantir compatibilidade
-            this.closeSidebar.addEventListener('touchstart', (e) => {
-                console.log('closeSidebar touchstart');
-                e.preventDefault();
-                this.closeSidebarMenu();
-            });
+            // Remover eventos existentes para evitar duplicação
+            this.closeSidebar.removeEventListener('click', this.handleCloseSidebar);
+            this.closeSidebar.removeEventListener('touchstart', this.handleCloseSidebar);
+            this.closeSidebar.removeEventListener('mousedown', this.handleCloseSidebar);
             
-            this.closeSidebar.addEventListener('mousedown', (e) => {
-                console.log('closeSidebar mousedown');
-                e.preventDefault();
-                this.closeSidebarMenu();
-            });
+            // Adicionar eventos
+            this.closeSidebar.addEventListener('click', this.handleCloseSidebar);
+            this.closeSidebar.addEventListener('touchstart', this.handleCloseSidebar);
+            this.closeSidebar.addEventListener('mousedown', this.handleCloseSidebar);
+            
+            // Teste de clique programático
+            setTimeout(() => {
+                console.log('Testing close button functionality...');
+                console.log('Close button element:', this.closeSidebar);
+                console.log('Close button visible:', this.closeSidebar.offsetParent !== null);
+                console.log('Close button styles:', window.getComputedStyle(this.closeSidebar));
+            }, 2000);
+            
         } else {
             console.error('closeSidebar element not found!');
+            // Tentar encontrar o elemento novamente
+            setTimeout(() => {
+                this.closeSidebar = document.getElementById('closeSidebar');
+                if (this.closeSidebar) {
+                    console.log('Found closeSidebar element on retry');
+                    this.bindEvents();
+                } else {
+                    console.error('closeSidebar element still not found after retry');
+                }
+            }, 1000);
         }
         
         // Overlay para fechar sidebar no mobile
@@ -106,6 +128,14 @@ class DocumentReader {
         
         // Touch events para mobile
         this.addTouchEvents();
+    }
+
+    // Método separado para lidar com o fechamento da sidebar
+    handleCloseSidebar = (e) => {
+        console.log('handleCloseSidebar called with event:', e.type);
+        e.preventDefault();
+        e.stopPropagation();
+        this.closeSidebarMenu();
     }
 
     toggleSidebar() {
@@ -785,13 +815,20 @@ class DocumentReader {
     }
 }
 
-// Inicializar o leitor quando a página carregar
+// Aguardar o DOM estar carregado
 document.addEventListener('DOMContentLoaded', () => {
-    new DocumentReader();
-});
-
-// Adicionar funcionalidade de drag and drop
-document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing DocumentReader...');
+    
+    // Verificar se PDF.js está disponível
+    if (typeof pdfjsLib === 'undefined') {
+        console.error('PDF.js not loaded!');
+        return;
+    }
+    
+    // Inicializar a aplicação
+    window.documentReader = new DocumentReader();
+    
+    // Adicionar funcionalidade de drag and drop
     const dropZone = document.querySelector('.document-viewer');
     
     dropZone.addEventListener('dragover', (e) => {
@@ -817,10 +854,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
-
-// Expor a instância globalmente para drag and drop
-window.documentReader = null;
-document.addEventListener('DOMContentLoaded', () => {
-    window.documentReader = new DocumentReader();
 }); 
