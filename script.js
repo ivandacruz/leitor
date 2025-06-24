@@ -538,10 +538,22 @@ class DocumentReader {
     }
 
     showWelcome() {
+        console.log('showWelcome called');
+        
+        // Limpar o visualizador
+        this.viewerWrapper.innerHTML = '';
+        
+        // Mostrar tela de boas-vindas
         this.welcomeScreen.style.display = 'flex';
         this.viewerContainer.style.display = 'none';
+        
+        // Limpar título do documento
         this.currentDocumentTitle.textContent = 'Selecione um documento';
+        
+        // Atualizar controles
         this.updateControls();
+        
+        console.log('Welcome screen shown, viewer cleared');
     }
 
     showLoading() {
@@ -723,15 +735,40 @@ class DocumentReader {
     }
 
     removeDocument(documentId) {
-        this.documents = this.documents.filter(doc => doc.id !== documentId);
+        console.log('removeDocument called with ID:', documentId);
+        console.log('Current document:', this.currentDocument);
         
+        // Remover documento da lista
+        this.documents = this.documents.filter(doc => doc.id !== documentId);
+        console.log('Documents after removal:', this.documents.length);
+        
+        // Se o documento removido era o atual, limpar o visualizador
         if (this.currentDocument && this.currentDocument.id === documentId) {
+            console.log('Removing current document from viewer');
             this.currentDocument = null;
+            this.currentPage = 1;
+            this.zoomLevel = 1.0;
+            
+            // Limpar o visualizador
+            this.viewerWrapper.innerHTML = '';
+            
+            // Limpar o título do documento
+            this.currentDocumentTitle.textContent = 'Selecione um documento';
+            
+            // Mostrar tela de boas-vindas
             this.showWelcome();
+            
+            // Desabilitar controles
+            this.updateControls();
         }
         
+        // Atualizar a lista de documentos
         this.renderDocumentList();
+        
+        // Salvar no localStorage
         this.saveDocumentsToStorage();
+        
+        console.log('Document removal completed');
     }
 
     confirmClearAll() {
@@ -792,14 +829,26 @@ class DocumentReader {
         });
         
         clearBtn.addEventListener('click', () => {
+            console.log('Clearing all documents');
+            
+            // Limpar lista de documentos
             this.documents = [];
+            
+            // Limpar documento atual
             this.currentDocument = null;
             this.currentPage = 1;
             this.zoomLevel = 1.0;
             this.isFullscreen = false;
+            
+            // Limpar o visualizador
+            this.viewerWrapper.innerHTML = '';
+            
+            // Atualizar interface
             this.renderDocumentList();
             this.saveDocumentsToStorage();
             this.showWelcome();
+            
+            console.log('All documents cleared');
             modal.remove();
         });
         
