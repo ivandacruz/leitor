@@ -213,6 +213,13 @@ input[type="file"] {
     cursor: pointer;
     transition: all 0.3s ease;
     opacity: 0.7;
+    position: relative;
+    z-index: 10;
+    min-width: 32px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .remove-btn:hover {
@@ -221,8 +228,13 @@ input[type="file"] {
     transform: scale(1.1);
 }
 
+.remove-btn:active {
+    transform: scale(0.95);
+}
+
 .remove-btn i {
     font-size: 0.9rem;
+    pointer-events: none;
 }
 
 /* Conteúdo principal */

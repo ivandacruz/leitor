@@ -223,9 +223,11 @@ class DocumentReader {
             return;
         }
         
-        this.documents.forEach(doc => {
+        this.documents.forEach((doc, index) => {
             const docElement = document.createElement('div');
             docElement.className = 'document-item';
+            docElement.setAttribute('data-doc-id', doc.id);
+            
             if (this.currentDocument && this.currentDocument.id === doc.id) {
                 docElement.classList.add('active');
             }
@@ -236,7 +238,7 @@ class DocumentReader {
                     <p>${doc.type} • ${doc.size} • ${doc.addedAt}</p>
                 </div>
                 <div class="document-actions">
-                    <button class="remove-btn" title="Remover documento">
+                    <button class="remove-btn" title="Remover documento" type="button">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -244,20 +246,33 @@ class DocumentReader {
             
             // Evento para abrir documento
             const documentInfo = docElement.querySelector('.document-info');
-            documentInfo.addEventListener('click', () => this.openDocument(doc));
+            documentInfo.addEventListener('click', () => {
+                console.log('Abrindo documento:', doc.name);
+                this.openDocument(doc);
+            });
             
             // Evento para remover documento
             const removeBtn = docElement.querySelector('.remove-btn');
-            removeBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Evitar que o clique propague para o documento
+            
+            const handleRemove = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Tentando remover documento:', doc.name);
                 this.confirmRemoveDocument(doc);
-            });
+            };
+            
+            // Adicionar múltiplos tipos de eventos para garantir compatibilidade
+            removeBtn.addEventListener('click', handleRemove);
+            removeBtn.addEventListener('touchstart', handleRemove);
+            removeBtn.addEventListener('mousedown', handleRemove);
             
             this.documentList.appendChild(docElement);
         });
     }
 
     confirmRemoveDocument(document) {
+        console.log('Confirmando remoção do documento:', document.name); // Debug
+        
         // Criar modal de confirmação
         const modal = document.createElement('div');
         modal.className = 'confirm-modal';
@@ -311,10 +326,12 @@ class DocumentReader {
         const removeBtn = modal.querySelector('.btn-remove');
         
         cancelBtn.addEventListener('click', () => {
+            console.log('Remoção cancelada'); // Debug
             modal.remove();
         });
         
         removeBtn.addEventListener('click', () => {
+            console.log('Removendo documento:', document.name); // Debug
             this.removeDocument(document.id);
             modal.remove();
         });
