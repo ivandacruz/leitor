@@ -8,10 +8,12 @@ class DocumentReader {
         this.currentPage = 1;
         this.zoomLevel = 1.0;
         this.isFullscreen = false;
+        this.escHandler = null;
         
         this.initializeElements();
         this.bindEvents();
         this.loadStoredDocuments();
+        this.adjustSidebarForScreenSize(); // Ajustar sidebar inicialmente
     }
 
     initializeElements() {
@@ -581,6 +583,43 @@ class DocumentReader {
         if (this.currentDocument && this.currentDocument.type === 'PDF') {
             this.renderCurrentPage();
         }
+        
+        // Ajustar sidebar baseado no tamanho da tela
+        this.adjustSidebarForScreenSize();
+    }
+
+    adjustSidebarForScreenSize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const isLandscape = width > height;
+        
+        // Fechar sidebar automaticamente em telas pequenas se estiver aberta
+        if (width <= 768 && this.sidebar.classList.contains('open')) {
+            // Manter aberta apenas se for landscape e tela pequena
+            if (!isLandscape || width <= 480) {
+                this.closeSidebarMenu();
+            }
+        }
+        
+        // Ajustar comportamento baseado no tamanho da tela
+        if (width <= 480) {
+            // Mobile muito pequeno - sidebar ocupa toda a largura
+            this.sidebar.style.width = '100%';
+        } else if (width <= 768) {
+            // Mobile/tablet pequeno
+            this.sidebar.style.width = isLandscape ? '320px' : '280px';
+        } else if (width <= 1024) {
+            // Tablet
+            this.sidebar.style.width = '280px';
+        } else if (width >= 1440) {
+            // Telas grandes
+            this.sidebar.style.width = '350px';
+        } else {
+            // Desktop padrão
+            this.sidebar.style.width = '300px';
+        }
+        
+        console.log(`Tela ajustada: ${width}x${height} - Landscape: ${isLandscape}`);
     }
 
     saveDocumentsToStorage() {
