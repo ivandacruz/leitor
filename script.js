@@ -114,8 +114,29 @@ class DocumentReader {
         this.nextPage.addEventListener('click', () => this.nextPage());
         
         // Eventos de zoom
-        this.zoomOut.addEventListener('click', () => this.zoomOut());
-        this.zoomIn.addEventListener('click', () => this.zoomIn());
+        console.log('Setting up zoom events...');
+        console.log('zoomOut element:', this.zoomOut);
+        console.log('zoomIn element:', this.zoomIn);
+        
+        if (this.zoomOut) {
+            this.zoomOut.addEventListener('click', (e) => {
+                console.log('zoomOut button clicked');
+                e.preventDefault();
+                this.zoomOut();
+            });
+        } else {
+            console.error('zoomOut element not found!');
+        }
+        
+        if (this.zoomIn) {
+            this.zoomIn.addEventListener('click', (e) => {
+                console.log('zoomIn button clicked');
+                e.preventDefault();
+                this.zoomIn();
+            });
+        } else {
+            console.error('zoomIn element not found!');
+        }
         
         // Evento fullscreen
         this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
@@ -477,27 +498,41 @@ class DocumentReader {
     }
 
     async renderPDFPage(pageNumber) {
-        const page = await this.pdfDocument.getPage(pageNumber);
-        const viewport = page.getViewport({ scale: this.zoomLevel });
+        console.log('renderPDFPage called with page:', pageNumber, 'zoom level:', this.zoomLevel);
         
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        
-        const renderContext = {
-            canvasContext: context,
-            viewport: viewport
-        };
-        
-        await page.render(renderContext).promise;
-        
-        const pageDiv = document.createElement('div');
-        pageDiv.className = 'pdf-page';
-        pageDiv.appendChild(canvas);
-        
-        this.viewerWrapper.innerHTML = '';
-        this.viewerWrapper.appendChild(pageDiv);
+        try {
+            const page = await this.pdfDocument.getPage(pageNumber);
+            console.log('PDF page loaded:', page);
+            
+            const viewport = page.getViewport({ scale: this.zoomLevel });
+            console.log('Viewport created with scale:', this.zoomLevel, 'dimensions:', viewport.width, 'x', viewport.height);
+            
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            
+            console.log('Canvas created with dimensions:', canvas.width, 'x', canvas.height);
+            
+            const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            
+            await page.render(renderContext).promise;
+            console.log('PDF page rendered to canvas');
+            
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'pdf-page';
+            pageDiv.appendChild(canvas);
+            
+            this.viewerWrapper.innerHTML = '';
+            this.viewerWrapper.appendChild(pageDiv);
+            
+            console.log('PDF page added to viewer');
+        } catch (error) {
+            console.error('Error rendering PDF page:', error);
+        }
     }
 
     async loadEPUB(file) {
@@ -607,18 +642,58 @@ class DocumentReader {
     }
 
     zoomOut() {
+        console.log('zoomOut called, current zoom level:', this.zoomLevel);
+        
+        if (!this.currentDocument) {
+            console.log('No current document, zoom disabled');
+            return;
+        }
+        
         if (this.zoomLevel > 0.5) {
             this.zoomLevel -= 0.25;
-            this.renderCurrentPage();
+            console.log('Zoom level decreased to:', this.zoomLevel);
+            
+            if (this.currentDocument.type === 'PDF') {
+                this.renderCurrentPage().then(() => {
+                    console.log('PDF page re-rendered with new zoom');
+                }).catch(error => {
+                    console.error('Error re-rendering PDF page:', error);
+                });
+            } else {
+                console.log('Document type not PDF, zoom not applicable');
+            }
+            
             this.updateControls();
+        } else {
+            console.log('Zoom level at minimum (0.5)');
         }
     }
 
     zoomIn() {
+        console.log('zoomIn called, current zoom level:', this.zoomLevel);
+        
+        if (!this.currentDocument) {
+            console.log('No current document, zoom disabled');
+            return;
+        }
+        
         if (this.zoomLevel < 3.0) {
             this.zoomLevel += 0.25;
-            this.renderCurrentPage();
+            console.log('Zoom level increased to:', this.zoomLevel);
+            
+            if (this.currentDocument.type === 'PDF') {
+                this.renderCurrentPage().then(() => {
+                    console.log('PDF page re-rendered with new zoom');
+                }).catch(error => {
+                    console.error('Error re-rendering PDF page:', error);
+                });
+            } else {
+                console.log('Document type not PDF, zoom not applicable');
+            }
+            
             this.updateControls();
+        } else {
+            console.log('Zoom level at maximum (3.0)');
         }
     }
 

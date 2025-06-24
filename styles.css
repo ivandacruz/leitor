@@ -400,19 +400,44 @@ input[type="file"] {
 .zoom-btn {
     background: #ecf0f1;
     border: none;
-    padding: 8px;
-    border-radius: 5px;
+    padding: 10px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    min-width: 40px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    touch-action: manipulation;
+    position: relative;
+    z-index: 10;
 }
 
 .zoom-btn:hover:not(:disabled) {
     background: #d5dbdb;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.zoom-btn:active:not(:disabled) {
+    transform: scale(0.95);
+    background: #bdc3c7;
+}
+
+.zoom-btn:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
 }
 
 .zoom-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
 }
 
 .zoom-level {
