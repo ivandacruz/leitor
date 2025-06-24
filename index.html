@@ -16,7 +16,7 @@
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-book-open"></i> Leitor</h2>
-                <button class="close-sidebar" id="closeSidebar" onclick="console.log('Close button clicked via onclick'); document.getElementById('sidebar').classList.remove('open');">
+                <button class="close-sidebar" id="closeSidebar" onclick="if(window.documentReader) { console.log('Close button clicked via onclick'); window.documentReader.closeSidebarMenu(); } else { console.log('DocumentReader not available'); document.getElementById('sidebar').classList.remove('open'); }">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
